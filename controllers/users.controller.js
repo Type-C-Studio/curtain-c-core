@@ -1,33 +1,26 @@
 const db = require("../models");
-const Records = db.records;
+const Users = db.users;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Tutorial
+// Create and Save data
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.name) {
+  if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!",
     });
     return;
   }
 
-  // Create a Tutorial
-  const recordsa = {
-    qty: req.body.qty,
-    customer_address: req.body.customer_address,
-    // customer_company: req.body.customer_company,
-    // customer_email: req.body.customer_email,
-    // customer_name: req.body.customer_name,
-    // customer_tax: req.body.customer_tax,
-    // customer_tel: req.body.customer_tel,
-    // date: req.body.date,
-    // rooms: req.body.rooms,
-    // published: req.body.published ? req.body.published : false,
+  const user = {
+    name: req.body.name,
+    password: req.body.password,
+    email: req.body.email,
+    position: req.body.position,
+    user_name: req.body.user_name,
   };
 
-  // Save Tutorial in the database
-  Records.create(recordsa)
+  Users.create(user)
     .then((data) => {
       res.send(data);
     })
@@ -39,12 +32,12 @@ exports.create = (req, res) => {
     });
 };
 
-// Retrieve all Tutorials from the database.
+// Find all data in table
 exports.findAll = (req, res) => {
   const name = req.query.name;
   var condition = name ? { title: { [Op.like]: `%${name}%` } } : null;
 
-  Records.findAll({ where: condition })
+  Users.findAll({ where: condition })
     .then((data) => {
       res.send(data);
     })
@@ -55,14 +48,23 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find a single Tutorial with an id
+// Find a single with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Records.findByPk(id)
+  Users.findByPk(id)
     .then((data) => {
       if (data) {
-        res.send(data);
+        const newData = {
+          id: data.id,
+          name: data.name,
+          password: data.password,
+          email: data.email,
+          position: data.position,
+          user_name: data.user_name,
+        };
+
+        res.send(newData);
       } else {
         res.status(404).send({
           message: `Cannot find Records with id=${id}.`,
@@ -71,23 +73,44 @@ exports.findOne = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error retrieving Records with id=" + id,
+        message: "Error retrieving Records with id=" + id + "/" + err,
       });
     });
 };
 
-// Update a Tutorial by the id in the request
+// Update by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  Records.update(req.body, {
+  Users.update(req.body, {
     where: { id: id },
   })
     .then((num) => {
       if (num == 1) {
-        res.send({
-          message: "Records was updated successfully.",
-        });
+        Users.findByPk(id)
+          .then((data) => {
+            if (data) {
+              const newData = {
+                id: data.id,
+                name: data.name,
+                password: data.password,
+                email: data.email,
+                position: data.position,
+                user_name: data.user_name,
+              };
+
+              res.send(newData);
+            } else {
+              res.status(404).send({
+                message: `Cannot find Records with id=${id}.`,
+              });
+            }
+          })
+          .catch((err) => {
+            res.status(500).send({
+              message: "Error retrieving Records with id=" + id + "/" + err,
+            });
+          });
       } else {
         res.send({
           message: `Cannot update Assets with id=${id}. Maybe Records was not found or req.body is empty!`,
@@ -101,11 +124,11 @@ exports.update = (req, res) => {
     });
 };
 
-// Delete a Tutorial with the specified id in the request
+// Delete with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Records.destroy({
+  Users.destroy({
     where: { id: id },
   })
     .then((num) => {
@@ -121,7 +144,7 @@ exports.delete = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Could not delete Records with id=" + id,
+        message: "Error delete Records with id=" + id + "/" + err,
       });
     });
 };

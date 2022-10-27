@@ -4,7 +4,8 @@ const cors = require("cors");
 const logger = require("./logger");
 const db = require("./models");
 
-const customers = require("./controllers/customers.controller");
+const users = require("./controllers/users.controller");
+const jobs = require("./controllers/jobs.controller");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -31,13 +32,22 @@ app.get(pathApi + "/", (req, res) => {
   res.json("Hello World form server Curtain-c");
 });
 
-// customer api
+// users api
 {
-  app.post(pathApi + "/customers" + "/create", customers.create);
-  app.get(pathApi + "/customers" + "/", customers.findAll);
-  app.get(pathApi + "/customers" + "/:id", customers.findOne);
-  app.put(pathApi + "/customers" + "/edit/:id", customers.update);
-  app.delete(pathApi + "/customers" + "/delete/:id", customers.delete);
+  app.post(pathApi + "/users" + "/create", users.create);
+  app.get(pathApi + "/users" + "/", users.findAll);
+  app.get(pathApi + "/users" + "/:id", users.findOne);
+  app.put(pathApi + "/users" + "/edit/:id", users.update);
+  app.delete(pathApi + "/users" + "/delete/:id", users.delete);
+}
+
+// jobs api
+{
+  app.post(pathApi + "/jobs" + "/create", jobs.create);
+  app.get(pathApi + "/jobs" + "/", jobs.findAll);
+  app.get(pathApi + "/jobs" + "/:id", jobs.findOne);
+  app.put(pathApi + "/jobs" + "/edit/:id", jobs.update);
+  app.delete(pathApi + "/jobs" + "/delete/:id", jobs.delete);
 }
 
 // Run the server
