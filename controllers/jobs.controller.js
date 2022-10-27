@@ -1,5 +1,7 @@
 const db = require("../models");
 const Jobs = db.jobs;
+const Rooms = db.rooms;
+
 const Op = db.Sequelize.Op;
 
 // Create and Save data
@@ -21,8 +23,11 @@ exports.create = (req, res) => {
     customer_tax: req.body.customer_tax,
     customer_tel: req.body.customer_tel,
     date: req.body.date,
-    rooms: JSON.stringify(req.body.rooms),
+    // rooms_id: 1,
+    // rooms: req.body.rooms,
   };
+
+  // console.log(job);
 
   Jobs.create(job)
     .then((data) => {
@@ -35,6 +40,39 @@ exports.create = (req, res) => {
       });
     });
 };
+
+// function () {
+//   var objArr = [];
+//   models.address.findById(6).then(function(address){
+//     objArr.push(address);
+//   });
+//   console.log(objArr);
+//   return objArr
+// }
+
+// function createRooms(params) {
+//   var v = [];
+
+//   params.map((room) => {
+//     Rooms.create(room)
+//       .then((data) => {
+//         console.log(data.dataValues);
+
+//         v.push(data.dataValues);
+//       })
+//       .catch((err) => {
+//         res.status(500).send({
+//           message:
+//             err.message || "Some error occurred while creating the record.",
+//         });
+//       });
+//   });
+
+//   return v;
+//   // console.log(v.join());
+
+//   // let res = v.join();
+// }
 
 // Find all data in table
 exports.findAll = (req, res) => {
@@ -72,7 +110,21 @@ exports.findOne = (req, res) => {
           rooms: JSON.parse(data.rooms),
         };
 
-        res.send(newData);
+        // const response = {
+        //   id: newData.id,
+        //   qty: newData.qty,
+        //   customer_address: newData.customer_address,
+        //   customer_company: newData.customer_company,
+        //   customer_email: newData.customer_email,
+        //   customer_name: newData.customer_name,
+        //   customer_tax: newData.customer_tax,
+        //   customer_tel: newData.customer_tel,
+        //   date: newData.date,
+        //   rooms: JSON.parse(newData.rooms),
+        //   vat: "test vat",
+        // };
+
+        res.send("pass");
       } else {
         res.status(404).send({
           message: `Cannot find Records with id=${id}.`,

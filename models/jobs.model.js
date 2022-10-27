@@ -24,8 +24,8 @@ module.exports = (sequelize, Sequelize) => {
     date: {
       type: Sequelize.STRING,
     },
-    rooms: {
-      type: Sequelize.STRING,
+    rooms_id: {
+      type: Sequelize.INTEGER,
     },
   });
 

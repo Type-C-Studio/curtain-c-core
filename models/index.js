@@ -20,6 +20,12 @@ db.sequelize = sequelize;
 
 db.users = require("./users.model")(sequelize, Sequelize);
 db.jobs = require("./jobs.model")(sequelize, Sequelize);
+db.rooms = require("./rooms.model")(sequelize, Sequelize);
+
+// db.jobs.hasMany(db.rooms, {
+//   foreignKey: "rooms_id",
+// });
+// db.rooms.belongsTo(db.jobs);
 
 module.exports = db;
 
