@@ -21,6 +21,10 @@ db.sequelize = sequelize;
 db.users = require("./users.model")(sequelize, Sequelize);
 db.jobs = require("./jobs.model")(sequelize, Sequelize);
 db.rooms = require("./rooms.model")(sequelize, Sequelize);
+db.test = require("./test.model")(sequelize, Sequelize);
+db.test1 = require("./test1.model")(sequelize, Sequelize);
+db.testing = require("./testing.model")(sequelize, Sequelize);
+db.user = require("./usersdb.model")(sequelize, Sequelize);
 
 // db.jobs.hasMany(db.rooms, {
 //   foreignKey: "rooms_id",
