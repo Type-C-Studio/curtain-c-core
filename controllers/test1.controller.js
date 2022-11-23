@@ -5,7 +5,7 @@ const puppeteer = require("puppeteer");
 const hbs = require("handlebars");
 const fs = require("fs-extra");
 const path = require("path");
-const data = require("../data.json");
+// const data = require("../data.json");
 
 exports.genpdf = async (req, res) => {
   // const browser = await puppeteer.launch({ headless: true });
@@ -18,7 +18,15 @@ exports.genpdf = async (req, res) => {
   // await browser.close();
   // return pdf;
 
-  const compile = async function (templateName, data) {
+  const datas = await Test1.findByPk(32);
+
+  console.log("dataa", datas.dataValues);
+
+  const newData = {
+    text1: datas.dataValues.rail_ocpa_price === 0 ? "ผ้าโปร่ง" : "eieiza",
+  };
+
+  const compile = async function (templateName, datas) {
     const filePath = path.join(
       process.cwd(),
       "templates",
@@ -27,17 +35,17 @@ exports.genpdf = async (req, res) => {
 
     const html = await fs.readFile(filePath, "utf8");
 
-    return hbs.compile(html)(data);
+    return hbs.compile(html)(datas);
   };
 
   try {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    const content = await compile("index", data);
+    const content = await compile("index", newData);
     await page.setContent(content);
 
-    const pd= await page.pdf({
-      path: "output.pdf",
+    const pd = await page.pdf({
+      path: `D:/pdf-c/${datas.dataValues.qty}.pdf`,
       format: "A4",
       printBackground: true,
     });
